@@ -18,7 +18,6 @@ from ...Common import (
     KEY_BATTENEDCOL_SEC_SIZE,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS_UI,
 
-
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS
 
@@ -46,9 +45,18 @@ from ...Common import (
     KEY_BATTENEDCOL_WELD_SIZE_OPTIONS,
     KEY_BATTENEDCOL_BOLT_DIAMETER,
     KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS,
+
+    KEY_BATTENEDCOL_BOLT_TYPE,
+    KEY_BATTENEDCOL_EFFECTIVE_AREA_OPTIONS,
+    KEY_BATTENEDCOL_ALLOWABLE_UR_OPTIONS,
+    KEY_BATTENEDCOL_WELD_SIZE_OPTIONS_UI,
+    KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS_UI,
+    KEY_BATTENEDCOL_BOLT_TYPE_OPTIONS,
+    KEY_DISP_BATTENEDCOL_BOLT_TYPE,
     KEY_BATTENEDCOL_EFFECTIVE_AREA,
     KEY_BATTENEDCOL_ALLOWABLE_UR,
-
+    KEY_BATTENEDCOL_EFFECTIVE_AREA,
+    KEY_BATTENEDCOL_ALLOWABLE_UR,
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE,
     KEY_DISP_BATTENEDCOL_SEC_PROFILE,
     KEY_DISP_BATTENEDCOL_SEC_SIZE,
@@ -62,6 +70,12 @@ from ...Common import (
     KEY_DISP_BATTENEDCOL_END_CONDITION_ZZ_2,
     KEY_DISP_BATTENEDCOL_BATTEN_PROFILE,
     KEY_DISP_BATTENEDCOL_AXIAL_LOAD,
+    KEY_DISP_BATTENEDCOL_CONN_TYPE,
+    KEY_DISP_BATTENEDCOL_EFFECTIVE_AREA,
+    KEY_DISP_BATTENEDCOL_ALLOWABLE_UR,
+    KEY_DISP_BATTENEDCOL_BOLT_DIAMETER,
+    KEY_DISP_BATTENEDCOL_WELD_SIZE,
+    KEY_DISP_BATTENEDCOL_BOLT_TYPE
     KEY_DISP_BATTENEDCOL_CONN_TYPE
 
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE
@@ -146,7 +160,6 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_material.addItems(KEY_BATTENEDCOL_MATERIAL_OPTIONS)
         self.combo_material.currentTextChanged.connect(self._handle_material_change)
 
-
         self.edit_lyy = QLineEdit()
         self.edit_lzz = QLineEdit()
 
@@ -161,6 +174,9 @@ class BattenedColumnInputWidget(QWidget):
 
         self.combo_batten_profile = QComboBox()
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS_UI)
+        self.combo_batten_section = QComboBox()
+        self.combo_batten_section.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
+
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS)
 
@@ -171,6 +187,15 @@ class BattenedColumnInputWidget(QWidget):
 
         # Preference controls
         self.combo_weld_size = QComboBox()
+        self.combo_weld_size.addItems(KEY_BATTENEDCOL_WELD_SIZE_OPTIONS_UI)
+        self.combo_bolt_dia = QComboBox()
+        self.combo_bolt_dia.addItems(KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS_UI)
+        self.combo_bolt_type = QComboBox()
+        self.combo_bolt_type.addItems(KEY_BATTENEDCOL_BOLT_TYPE_OPTIONS)
+        self.combo_effective_area = QComboBox()
+        self.combo_effective_area.addItems(KEY_BATTENEDCOL_EFFECTIVE_AREA_OPTIONS)
+        self.combo_allowable_ur = QComboBox()
+        self.combo_allowable_ur.addItems(KEY_BATTENEDCOL_ALLOWABLE_UR_OPTIONS)
         self.combo_weld_size.addItems(KEY_BATTENEDCOL_WELD_SIZE_OPTIONS)
         self.combo_bolt_dia = QComboBox()
         self.combo_bolt_dia.addItems(KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS)
@@ -257,6 +282,29 @@ class BattenedColumnInputWidget(QWidget):
 
     def _create_pref_tab(self):
         tab = QWidget()
+        prefs_tabs = QTabWidget()
+
+        weld_tab = QWidget()
+        weld_form = QFormLayout()
+        weld_form.addRow(KEY_DISP_BATTENEDCOL_EFFECTIVE_AREA, self.combo_effective_area)
+        weld_form.addRow(KEY_DISP_BATTENEDCOL_ALLOWABLE_UR, self.combo_allowable_ur)
+        weld_form.addRow(KEY_DISP_BATTENEDCOL_BATTEN_PROFILE, self.combo_batten_section)
+        weld_form.addRow(KEY_DISP_BATTENEDCOL_WELD_SIZE, self.combo_weld_size)
+        weld_tab.setLayout(weld_form)
+
+        bolt_tab = QWidget()
+        bolt_form = QFormLayout()
+        bolt_form.addRow(KEY_DISP_BATTENEDCOL_BOLT_DIAMETER, self.combo_bolt_dia)
+        bolt_form.addRow(KEY_DISP_BATTENEDCOL_BOLT_TYPE, self.combo_bolt_type)
+        bolt_tab.setLayout(bolt_form)
+
+        prefs_tabs.addTab(weld_tab, "Weld Preferences")
+        prefs_tabs.addTab(bolt_tab, "Bolt Preferences")
+
+        layout = QVBoxLayout()
+        layout.addWidget(prefs_tabs)
+        tab.setLayout(layout)
+        self.tabs.addTab(tab, "Design Preferences")
         form = QFormLayout()
         form.addRow("Weld Size", self.combo_weld_size)
         form.addRow("Bolt Diameter", self.combo_bolt_dia)
