@@ -919,6 +919,8 @@ KEY_DISP_BATTENEDCOL_ALLOWABLE_UR = 'Allowable Utilization Ratio*'
 KEY_BATTENEDCOL_BATTEN_PROFILE = 'BattenedColumn.BattenProfile'
 KEY_DISP_BATTENEDCOL_BATTEN_PROFILE = 'Battening Profile Section'
 KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS = ['ISA 40x40x5', 'ISMC 75', 'ISF 100x8']
+# UI specific options for Battening Profile
+KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS_UI = ['Angle', 'Channel', 'Flat']
 
 KEY_BATTENEDCOL_BOLT_DIAMETER = 'BattenedColumn.BoltDiameter'
 KEY_DISP_BATTENEDCOL_BOLT_DIAMETER = 'Bolt Diameter'
