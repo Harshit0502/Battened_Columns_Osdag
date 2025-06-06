@@ -8,6 +8,9 @@ from ...Common import (
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI,
     KEY_BATTENEDCOL_SEC_SIZE,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS_UI,
+    KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS,
+    KEY_BATTENEDCOL_SEC_SIZE,
+    KEY_BATTENEDCOL_SEC_SIZE_OPTIONS
     KEY_BATTENEDCOL_SPACING,
     KEY_BATTENEDCOL_MATERIAL,
     KEY_BATTENEDCOL_MATERIAL_OPTIONS,
@@ -30,6 +33,7 @@ from ...Common import (
     KEY_BATTENEDCOL_EFFECTIVE_AREA,
     KEY_BATTENEDCOL_ALLOWABLE_UR,
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE
+    KEY_BATTENEDCOL_ALLOWABLE_UR
 )
 
 class BattenedColumnInputWidget(QWidget):
@@ -44,6 +48,7 @@ class BattenedColumnInputWidget(QWidget):
     def _create_widgets(self):
         # Input controls
         self.combo_sec_profile = QComboBox()
+
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI)
 
         self.combo_sec_size = QComboBox()
@@ -53,6 +58,10 @@ class BattenedColumnInputWidget(QWidget):
         self.lbl_custom_size.setVisible(False)
         self.edit_custom_size.setVisible(False)
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
+        self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
+
+        self.combo_sec_size = QComboBox()
+        self.combo_sec_size.addItems(KEY_BATTENEDCOL_SEC_SIZE_OPTIONS)
 
         self.edit_spacing = QLineEdit()
 
@@ -107,6 +116,7 @@ class BattenedColumnInputWidget(QWidget):
         form.addRow("Section Profile", self.combo_sec_profile)
         form.addRow("Section Size", self.combo_sec_size)
         form.addRow(self.lbl_custom_size, self.edit_custom_size)
+
         form.addRow("Spacing (mm)", self.edit_spacing)
 
         form.addRow(QLabel("<b>Material</b>"))
