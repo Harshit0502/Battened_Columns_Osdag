@@ -858,6 +858,11 @@ KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS = ['2-channels back-to-back', '2-channels fr
 KEY_BATTENEDCOL_SEC_SIZE = 'BattenedColumn.SectionSize'
 KEY_DISP_BATTENEDCOL_SEC_SIZE = 'Section Size*'
 KEY_BATTENEDCOL_SEC_SIZE_OPTIONS = ['User-defined', 'Optimized']
+# UI specific options for Section Profile and Size
+KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI = [
+    '2-channel Back-to-Back', '2-channel Front-to-Front', '2-Girders'
+]
+KEY_BATTENEDCOL_SEC_SIZE_OPTIONS_UI = ['User-defined', 'Auto-select']
 KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE = 'Custom Section Size (mm)*'
 # Battened Column Input and Design Preference Keys
 KEY_BATTENEDCOL_CUSTOM_SEC_SIZE = 'BattenedColumn.CustomSectionSize'
@@ -867,8 +872,11 @@ KEY_DISP_BATTENEDCOL_SPACING = 'Spacing (mm)'
 # Material Grade
 KEY_BATTENEDCOL_MATERIAL = 'BattenedColumn.MaterialGrade'
 KEY_DISP_BATTENEDCOL_MATERIAL = 'Material Grade*'
-KEY_MATERIAL = 'Material' 
+KEY_MATERIAL = 'Material'
 KEY_BATTENEDCOL_BOLT_TYPE = 'BattenedColumn.BoltType'
+KEY_BATTENEDCOL_MATERIAL_OPTIONS = [
+    'E250', 'E275', 'E300', 'Custom'
+]
 
 
 # Unsupported Lengths
@@ -911,6 +919,8 @@ KEY_DISP_BATTENEDCOL_ALLOWABLE_UR = 'Allowable Utilization Ratio*'
 KEY_BATTENEDCOL_BATTEN_PROFILE = 'BattenedColumn.BattenProfile'
 KEY_DISP_BATTENEDCOL_BATTEN_PROFILE = 'Battening Profile Section'
 KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS = ['ISA 40x40x5', 'ISMC 75', 'ISF 100x8']
+# UI specific options for Battening Profile
+KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS_UI = ['Angle', 'Channel', 'Flat']
 
 KEY_BATTENEDCOL_BOLT_DIAMETER = 'BattenedColumn.BoltDiameter'
 KEY_DISP_BATTENEDCOL_BOLT_DIAMETER = 'Bolt Diameter'
@@ -919,6 +929,16 @@ KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS = ['16mm', '18mm', '20mm', '22mm']
 KEY_BATTENEDCOL_WELD_SIZE = 'BattenedColumn.WeldSize'
 KEY_DISP_BATTENEDCOL_WELD_SIZE = 'Weld Size*'
 KEY_BATTENEDCOL_WELD_SIZE_OPTIONS = ['4mm', '5mm', '6mm', '8mm']
+
+# UI-specific lists for Battened Column design preferences
+KEY_BATTENEDCOL_EFFECTIVE_AREA_OPTIONS = [
+    '1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1'
+]
+KEY_BATTENEDCOL_ALLOWABLE_UR_OPTIONS = ['1.0', '0.95', '0.9', '0.85']
+KEY_BATTENEDCOL_WELD_SIZE_OPTIONS_UI = ['5mm', '6mm', '8mm']
+KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS_UI = ['16mm', '20mm', '24mm']
+KEY_BATTENEDCOL_BOLT_TYPE_OPTIONS = ['Bearing', 'Pretensioned']
+KEY_DISP_BATTENEDCOL_BOLT_TYPE = 'Bolt Type'
 
 
 ###################################
