@@ -867,8 +867,11 @@ KEY_DISP_BATTENEDCOL_SPACING = 'Spacing (mm)'
 # Material Grade
 KEY_BATTENEDCOL_MATERIAL = 'BattenedColumn.MaterialGrade'
 KEY_DISP_BATTENEDCOL_MATERIAL = 'Material Grade*'
-KEY_MATERIAL = 'Material' 
+KEY_MATERIAL = 'Material'
 KEY_BATTENEDCOL_BOLT_TYPE = 'BattenedColumn.BoltType'
+KEY_BATTENEDCOL_MATERIAL_OPTIONS = [
+    'E250', 'E275', 'E300', 'Custom'
+]
 
 
 # Unsupported Lengths
