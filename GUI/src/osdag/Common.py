@@ -858,6 +858,11 @@ KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS = ['2-channels back-to-back', '2-channels fr
 KEY_BATTENEDCOL_SEC_SIZE = 'BattenedColumn.SectionSize'
 KEY_DISP_BATTENEDCOL_SEC_SIZE = 'Section Size*'
 KEY_BATTENEDCOL_SEC_SIZE_OPTIONS = ['User-defined', 'Optimized']
+# UI specific options for Section Profile and Size
+KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI = [
+    '2-channel Back-to-Back', '2-channel Front-to-Front', '2-Girders'
+]
+KEY_BATTENEDCOL_SEC_SIZE_OPTIONS_UI = ['User-defined', 'Auto-select']
 KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE = 'Custom Section Size (mm)*'
 # Battened Column Input and Design Preference Keys
 KEY_BATTENEDCOL_CUSTOM_SEC_SIZE = 'BattenedColumn.CustomSectionSize'
