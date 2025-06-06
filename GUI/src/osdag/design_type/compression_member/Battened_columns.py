@@ -10,6 +10,8 @@ from PyQt5.QtWidgets import (
     QDialogButtonBox,
     QPushButton,
     QTextEdit,
+    QMessageBox,
+
 )
 
 from PyQt5.QtCore import Qt
@@ -22,6 +24,7 @@ from ...Common import (
 
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS
+
 
     KEY_BATTENEDCOL_SPACING,
     KEY_BATTENEDCOL_MATERIAL,
@@ -36,6 +39,7 @@ from ...Common import (
     KEY_BATTENEDCOL_BATTEN_PROFILE,
     KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS_UI,
     KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS,
+
 
     KEY_BATTENEDCOL_LACING_PROFILE,
     KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS,
@@ -84,6 +88,7 @@ from ...Common import (
     KEY_DISP_BATTENEDCOL_CONN_TYPE
 
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE
+
 )
 
 
@@ -153,12 +158,12 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
 
 
+
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
 
         self.combo_sec_size = QComboBox()
         self.combo_sec_size.addItems(KEY_BATTENEDCOL_SEC_SIZE_OPTIONS)
-
-
+        
         self.edit_spacing = QLineEdit()
 
         self.combo_material = QComboBox()
@@ -182,8 +187,10 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_batten_section = QComboBox()
         self.combo_batten_section.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
 
+
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS)
+
 
         self.edit_axial_load = QLineEdit()
         self.combo_connection = QComboBox()
@@ -207,6 +214,7 @@ class BattenedColumnInputWidget(QWidget):
         self.summary_display = QTextEdit()
         self.summary_display.setReadOnly(True)
         
+
         self.combo_weld_size.addItems(KEY_BATTENEDCOL_WELD_SIZE_OPTIONS)
         self.combo_bolt_dia = QComboBox()
         self.combo_bolt_dia.addItems(KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS)
@@ -294,6 +302,7 @@ class BattenedColumnInputWidget(QWidget):
         form.addRow("Type of Connection", self.combo_connection)
 
         tab.setLayout(form)
+
         self.tabs.addTab(tab, "Inputs")
 
     def _create_pref_tab(self):
@@ -321,6 +330,7 @@ class BattenedColumnInputWidget(QWidget):
         layout.addWidget(prefs_tabs)
         tab.setLayout(layout)
         self.tabs.addTab(tab, "Design Preferences")
+
         form = QFormLayout()
         form.addRow("Weld Size", self.combo_weld_size)
         form.addRow("Bolt Diameter", self.combo_bolt_dia)
@@ -342,7 +352,6 @@ class BattenedColumnInputWidget(QWidget):
                 self.custom_material_data = dialog.get_data()
                 grade = self.custom_material_data.get('grade') or 'Custom'
                 self.combo_material.setCurrentText(grade)
-
 
     def _collect_inputs(self):
         """Gather all input values into a dictionary."""
@@ -371,6 +380,44 @@ class BattenedColumnInputWidget(QWidget):
         if self.custom_material_data:
             data['custom_material'] = self.custom_material_data
         return data
+
+    def _validate_inputs(self) -> bool:
+        """Validate numeric inputs required for design."""
+        errors = []
+        try:
+            axial = float(self.edit_axial_load.text())
+            if axial <= 0:
+                errors.append("Axial Load must be greater than 0.")
+        except ValueError:
+            errors.append("Axial Load must be a valid number greater than 0.")
+
+        try:
+            lyy = float(self.edit_lyy.text())
+            if lyy <= 0:
+                errors.append("Unsupported Length y-y must be greater than 0.")
+        except ValueError:
+            errors.append(
+                "Unsupported Length y-y must be a valid number greater than 0."
+            )
+
+        try:
+            lzz = float(self.edit_lzz.text())
+            if lzz <= 0:
+                errors.append("Unsupported Length z-z must be greater than 0.")
+        except ValueError:
+            errors.append(
+                "Unsupported Length z-z must be a valid number greater than 0."
+            )
+
+        if errors:
+            QMessageBox.warning(self, "Input Error", "\n".join(errors))
+            return False
+        return True
+
+    def _on_design_clicked(self):
+        """Show a dummy design summary using the collected inputs."""
+        if not self._validate_inputs():
+            return
 
     def _on_design_clicked(self):
         """Show a dummy design summary using the collected inputs."""
