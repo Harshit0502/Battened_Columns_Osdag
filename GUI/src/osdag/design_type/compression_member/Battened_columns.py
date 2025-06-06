@@ -10,12 +10,18 @@ from PyQt5.QtWidgets import (
     QDialogButtonBox,
 )
 from PyQt5.QtCore import Qt
+    QWidget, QTabWidget, QVBoxLayout, QFormLayout, QComboBox, QLineEdit,
+    QLabel
+)
 
 from ...Common import (
     KEY_BATTENEDCOL_SEC_PROFILE,
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI,
     KEY_BATTENEDCOL_SEC_SIZE,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS_UI,
+    KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS,
+    KEY_BATTENEDCOL_SEC_SIZE,
+    KEY_BATTENEDCOL_SEC_SIZE_OPTIONS
     KEY_BATTENEDCOL_SPACING,
     KEY_BATTENEDCOL_MATERIAL,
     KEY_BATTENEDCOL_MATERIAL_OPTIONS,
@@ -82,6 +88,7 @@ class MaterialDialog(QDialog):
             "fu": self.fu_input.text(),
         }
 
+
 class BattenedColumnInputWidget(QWidget):
     """UI widget for Battened Column input."""
 
@@ -91,6 +98,7 @@ class BattenedColumnInputWidget(QWidget):
         self._create_widgets()
         self._create_layout()
         self.custom_material_data = {}
+
 
     def _create_widgets(self):
         # Input controls
@@ -105,11 +113,17 @@ class BattenedColumnInputWidget(QWidget):
         self.edit_custom_size.setVisible(False)
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
 
+        self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
+
+        self.combo_sec_size = QComboBox()
+        self.combo_sec_size.addItems(KEY_BATTENEDCOL_SEC_SIZE_OPTIONS)
+
         self.edit_spacing = QLineEdit()
 
         self.combo_material = QComboBox()
         self.combo_material.addItems(KEY_BATTENEDCOL_MATERIAL_OPTIONS)
         self.combo_material.currentTextChanged.connect(self._handle_material_change)
+
 
         self.edit_lyy = QLineEdit()
         self.edit_lzz = QLineEdit()
@@ -159,9 +173,16 @@ class BattenedColumnInputWidget(QWidget):
         form.addRow("Section Profile", self.combo_sec_profile)
         form.addRow("Section Size", self.combo_sec_size)
         form.addRow(self.lbl_custom_size, self.edit_custom_size)
+
         form.addRow("Spacing (mm)", self.edit_spacing)
 
         form.addRow(QLabel("<b>Material Properties</b>"))
+
+
+        form.addRow("Spacing (mm)", self.edit_spacing)
+
+        form.addRow(QLabel("<b>Material</b>"))
+
         form.addRow("Material Grade", self.combo_material)
 
         form.addRow(QLabel("<b>Geometry</b>"))
