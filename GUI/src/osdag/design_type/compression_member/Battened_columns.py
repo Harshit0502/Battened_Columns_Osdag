@@ -9,18 +9,15 @@ from PyQt5.QtWidgets import (
     QDialog,
     QDialogButtonBox,
 )
-from PyQt5.QtCore import Qt
-    QWidget, QTabWidget, QVBoxLayout, QFormLayout, QComboBox, QLineEdit,
-    QLabel
-)
+
 
 from ...Common import (
     KEY_BATTENEDCOL_SEC_PROFILE,
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI,
     KEY_BATTENEDCOL_SEC_SIZE,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS_UI,
+
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS,
-    KEY_BATTENEDCOL_SEC_SIZE,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS
     KEY_BATTENEDCOL_SPACING,
     KEY_BATTENEDCOL_MATERIAL,
@@ -32,8 +29,12 @@ from ...Common import (
     KEY_BATTENEDCOL_END_CONDITION_YY_2,
     KEY_BATTENEDCOL_END_CONDITION_ZZ_1,
     KEY_BATTENEDCOL_END_CONDITION_ZZ_2,
+    KEY_BATTENEDCOL_BATTEN_PROFILE,
+    KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS,
+
     KEY_BATTENEDCOL_LACING_PROFILE,
     KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS,
+
     KEY_BATTENEDCOL_AXIAL_LOAD,
     KEY_BATTENEDCOL_CONN_TYPE,
     KEY_BATTENEDCOL_CONN_TYPE_OPTIONS,
@@ -43,6 +44,21 @@ from ...Common import (
     KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS,
     KEY_BATTENEDCOL_EFFECTIVE_AREA,
     KEY_BATTENEDCOL_ALLOWABLE_UR,
+
+    KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE,
+    KEY_DISP_BATTENEDCOL_SEC_PROFILE,
+    KEY_DISP_BATTENEDCOL_SEC_SIZE,
+    KEY_DISP_BATTENEDCOL_SPACING,
+    KEY_DISP_BATTENEDCOL_MATERIAL,
+    KEY_DISP_BATTENEDCOL_UNSUPPORTED_LENGTH_YY,
+    KEY_DISP_BATTENEDCOL_UNSUPPORTED_LENGTH_ZZ,
+    KEY_DISP_BATTENEDCOL_END_CONDITION_YY_1,
+    KEY_DISP_BATTENEDCOL_END_CONDITION_YY_2,
+    KEY_DISP_BATTENEDCOL_END_CONDITION_ZZ_1,
+    KEY_DISP_BATTENEDCOL_END_CONDITION_ZZ_2,
+    KEY_DISP_BATTENEDCOL_BATTEN_PROFILE,
+    KEY_DISP_BATTENEDCOL_AXIAL_LOAD,
+    KEY_DISP_BATTENEDCOL_CONN_TYPE
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE
 )
 
@@ -113,10 +129,12 @@ class BattenedColumnInputWidget(QWidget):
         self.edit_custom_size.setVisible(False)
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
 
+
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
 
         self.combo_sec_size = QComboBox()
         self.combo_sec_size.addItems(KEY_BATTENEDCOL_SEC_SIZE_OPTIONS)
+
 
         self.edit_spacing = QLineEdit()
 
@@ -124,7 +142,7 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_material.addItems(KEY_BATTENEDCOL_MATERIAL_OPTIONS)
         self.combo_material.currentTextChanged.connect(self._handle_material_change)
 
-
+      
         self.edit_lyy = QLineEdit()
         self.edit_lzz = QLineEdit()
 
@@ -138,6 +156,7 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_zz2.addItems(KEY_BATTENEDCOL_END_CONDITION_OPTIONS)
 
         self.combo_batten_profile = QComboBox()
+        self.combo_batten_profile.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS)
 
         self.edit_axial_load = QLineEdit()
@@ -170,6 +189,30 @@ class BattenedColumnInputWidget(QWidget):
         form = QFormLayout()
 
         form.addRow(QLabel("<b>Section Details</b>"))
+        form.addRow(KEY_DISP_BATTENEDCOL_SEC_PROFILE, self.combo_sec_profile)
+        form.addRow(KEY_DISP_BATTENEDCOL_SEC_SIZE, self.combo_sec_size)
+        form.addRow(self.lbl_custom_size, self.edit_custom_size)
+        form.addRow(KEY_DISP_BATTENEDCOL_SPACING, self.edit_spacing)
+
+        form.addRow(QLabel("<b>Material Properties</b>"))
+        form.addRow(KEY_DISP_BATTENEDCOL_MATERIAL, self.combo_material)
+
+        form.addRow(QLabel("<b>Geometry</b>"))
+        form.addRow(KEY_DISP_BATTENEDCOL_UNSUPPORTED_LENGTH_YY, self.edit_lyy)
+        form.addRow(KEY_DISP_BATTENEDCOL_UNSUPPORTED_LENGTH_ZZ, self.edit_lzz)
+
+        form.addRow(QLabel("<b>End Conditions</b>"))
+        form.addRow(KEY_DISP_BATTENEDCOL_END_CONDITION_YY_1, self.combo_yy1)
+        form.addRow(KEY_DISP_BATTENEDCOL_END_CONDITION_YY_2, self.combo_yy2)
+        form.addRow(KEY_DISP_BATTENEDCOL_END_CONDITION_ZZ_1, self.combo_zz1)
+        form.addRow(KEY_DISP_BATTENEDCOL_END_CONDITION_ZZ_2, self.combo_zz2)
+
+        form.addRow(QLabel("<b>Battening</b>"))
+        form.addRow(KEY_DISP_BATTENEDCOL_BATTEN_PROFILE, self.combo_batten_profile)
+
+        form.addRow(QLabel("<b>Load and Connection</b>"))
+        form.addRow(KEY_DISP_BATTENEDCOL_AXIAL_LOAD, self.edit_axial_load)
+        form.addRow(KEY_DISP_BATTENEDCOL_CONN_TYPE, self.combo_connection)
         form.addRow("Section Profile", self.combo_sec_profile)
         form.addRow("Section Size", self.combo_sec_size)
         form.addRow(self.lbl_custom_size, self.edit_custom_size)
