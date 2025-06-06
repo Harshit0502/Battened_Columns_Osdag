@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
     QTextEdit,
     QMessageBox,
 
+
 )
 
 from PyQt5.QtCore import Qt
@@ -24,7 +25,6 @@ from ...Common import (
 
     KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS,
     KEY_BATTENEDCOL_SEC_SIZE_OPTIONS
-
 
     KEY_BATTENEDCOL_SPACING,
     KEY_BATTENEDCOL_MATERIAL,
@@ -39,7 +39,6 @@ from ...Common import (
     KEY_BATTENEDCOL_BATTEN_PROFILE,
     KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS_UI,
     KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS,
-
 
     KEY_BATTENEDCOL_LACING_PROFILE,
     KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS,
@@ -86,7 +85,6 @@ from ...Common import (
     KEY_DISP_BATTENEDCOL_WELD_SIZE,
     KEY_DISP_BATTENEDCOL_BOLT_TYPE
     KEY_DISP_BATTENEDCOL_CONN_TYPE
-
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE
 
 )
@@ -133,7 +131,6 @@ class MaterialDialog(QDialog):
             "fu": self.fu_input.text(),
         }
 
-
 class BattenedColumnInputWidget(QWidget):
     """UI widget for Battened Column input."""
 
@@ -156,8 +153,6 @@ class BattenedColumnInputWidget(QWidget):
         self.lbl_custom_size.setVisible(False)
         self.edit_custom_size.setVisible(False)
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
-
-
 
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
 
@@ -187,10 +182,8 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_batten_section = QComboBox()
         self.combo_batten_section.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
 
-
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS)
-
 
         self.edit_axial_load = QLineEdit()
         self.combo_connection = QComboBox()
@@ -418,6 +411,7 @@ class BattenedColumnInputWidget(QWidget):
         """Show a dummy design summary using the collected inputs."""
         if not self._validate_inputs():
             return
+
 
     def _on_design_clicked(self):
         """Show a dummy design summary using the collected inputs."""
