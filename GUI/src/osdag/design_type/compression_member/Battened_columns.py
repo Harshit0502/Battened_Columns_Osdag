@@ -1,4 +1,15 @@
 from PyQt5.QtWidgets import (
+    QWidget,
+    QTabWidget,
+    QVBoxLayout,
+    QFormLayout,
+    QComboBox,
+    QLineEdit,
+    QLabel,
+    QDialog,
+    QDialogButtonBox,
+)
+from PyQt5.QtCore import Qt
     QWidget, QTabWidget, QVBoxLayout, QFormLayout, QComboBox, QLineEdit,
     QLabel
 )
@@ -33,8 +44,50 @@ from ...Common import (
     KEY_BATTENEDCOL_EFFECTIVE_AREA,
     KEY_BATTENEDCOL_ALLOWABLE_UR,
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE
-    KEY_BATTENEDCOL_ALLOWABLE_UR
 )
+
+
+class MaterialDialog(QDialog):
+    """Dialog to capture custom material properties."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Custom Material")
+        self.setModal(True)
+        self._setup_ui()
+        # Remove the help button from the title bar
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+
+    def _setup_ui(self):
+        layout = QFormLayout(self)
+
+        self.grade_input = QLineEdit()
+        self.fy20_input = QLineEdit()
+        self.fy20_40_input = QLineEdit()
+        self.fy40_input = QLineEdit()
+        self.fu_input = QLineEdit()
+
+        layout.addRow("Grade", self.grade_input)
+        layout.addRow("Fy (20 mm)", self.fy20_input)
+        layout.addRow("Fy (20–40 mm)", self.fy20_40_input)
+        layout.addRow("Fy (40 mm)", self.fy40_input)
+        layout.addRow("Fu", self.fu_input)
+
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addRow(buttons)
+
+    def get_data(self):
+        """Return custom material data as a dictionary."""
+        return {
+            "grade": self.grade_input.text(),
+            "fy_20": self.fy20_input.text(),
+            "fy_20_40": self.fy20_40_input.text(),
+            "fy_40": self.fy40_input.text(),
+            "fu": self.fu_input.text(),
+        }
+
 
 class BattenedColumnInputWidget(QWidget):
     """UI widget for Battened Column input."""
@@ -44,11 +97,12 @@ class BattenedColumnInputWidget(QWidget):
         self.setWindowTitle("Battened Column")
         self._create_widgets()
         self._create_layout()
+        self.custom_material_data = {}
+
 
     def _create_widgets(self):
         # Input controls
         self.combo_sec_profile = QComboBox()
-
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS_UI)
 
         self.combo_sec_size = QComboBox()
@@ -58,6 +112,7 @@ class BattenedColumnInputWidget(QWidget):
         self.lbl_custom_size.setVisible(False)
         self.edit_custom_size.setVisible(False)
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
+
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
 
         self.combo_sec_size = QComboBox()
@@ -67,6 +122,8 @@ class BattenedColumnInputWidget(QWidget):
 
         self.combo_material = QComboBox()
         self.combo_material.addItems(KEY_BATTENEDCOL_MATERIAL_OPTIONS)
+        self.combo_material.currentTextChanged.connect(self._handle_material_change)
+
 
         self.edit_lyy = QLineEdit()
         self.edit_lzz = QLineEdit()
@@ -119,7 +176,13 @@ class BattenedColumnInputWidget(QWidget):
 
         form.addRow("Spacing (mm)", self.edit_spacing)
 
+        form.addRow(QLabel("<b>Material Properties</b>"))
+
+
+        form.addRow("Spacing (mm)", self.edit_spacing)
+
         form.addRow(QLabel("<b>Material</b>"))
+
         form.addRow("Material Grade", self.combo_material)
 
         form.addRow(QLabel("<b>Geometry</b>"))
@@ -156,4 +219,13 @@ class BattenedColumnInputWidget(QWidget):
         show = text == 'User-defined'
         self.lbl_custom_size.setVisible(show)
         self.edit_custom_size.setVisible(show)
+
+    def _handle_material_change(self, text):
+        """Open custom material dialog when required."""
+        if text == 'Custom':
+            dialog = MaterialDialog(self)
+            if dialog.exec_() == QDialog.Accepted:
+                self.custom_material_data = dialog.get_data()
+                grade = self.custom_material_data.get('grade') or 'Custom'
+                self.combo_material.setCurrentText(grade)
 
