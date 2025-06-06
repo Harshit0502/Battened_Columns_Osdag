@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import (
     QLabel,
     QDialog,
     QDialogButtonBox,
+    QPushButton,
+    QTextEdit,
 )
 
 from PyQt5.QtCore import Qt
@@ -45,6 +47,8 @@ from ...Common import (
     KEY_BATTENEDCOL_WELD_SIZE_OPTIONS,
     KEY_BATTENEDCOL_BOLT_DIAMETER,
     KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS,
+    KEY_BATTENEDCOL_BOLT_TYPE,
+    KEY_BATTENEDCOL_CUSTOM_SEC_SIZE,
 
     KEY_BATTENEDCOL_BOLT_TYPE,
     KEY_BATTENEDCOL_EFFECTIVE_AREA_OPTIONS,
@@ -55,6 +59,7 @@ from ...Common import (
     KEY_DISP_BATTENEDCOL_BOLT_TYPE,
     KEY_BATTENEDCOL_EFFECTIVE_AREA,
     KEY_BATTENEDCOL_ALLOWABLE_UR,
+
     KEY_BATTENEDCOL_EFFECTIVE_AREA,
     KEY_BATTENEDCOL_ALLOWABLE_UR,
     KEY_DISP_BATTENEDCOL_CUSTOM_SEC_SIZE,
@@ -148,11 +153,11 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_sec_size.currentTextChanged.connect(self._toggle_custom_size)
 
 
-
         self.combo_sec_profile.addItems(KEY_BATTENEDCOL_SEC_PROFILE_OPTIONS)
 
         self.combo_sec_size = QComboBox()
         self.combo_sec_size.addItems(KEY_BATTENEDCOL_SEC_SIZE_OPTIONS)
+
 
         self.edit_spacing = QLineEdit()
 
@@ -180,7 +185,6 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_BATTEN_PROFILE_OPTIONS)
         self.combo_batten_profile.addItems(KEY_BATTENEDCOL_LACING_PROFILE_OPTIONS)
 
-
         self.edit_axial_load = QLineEdit()
         self.combo_connection = QComboBox()
         self.combo_connection.addItems(KEY_BATTENEDCOL_CONN_TYPE_OPTIONS)
@@ -196,6 +200,13 @@ class BattenedColumnInputWidget(QWidget):
         self.combo_effective_area.addItems(KEY_BATTENEDCOL_EFFECTIVE_AREA_OPTIONS)
         self.combo_allowable_ur = QComboBox()
         self.combo_allowable_ur.addItems(KEY_BATTENEDCOL_ALLOWABLE_UR_OPTIONS)
+
+        # Design action and summary
+        self.btn_design = QPushButton("Design")
+        self.btn_design.clicked.connect(self._on_design_clicked)
+        self.summary_display = QTextEdit()
+        self.summary_display.setReadOnly(True)
+        
         self.combo_weld_size.addItems(KEY_BATTENEDCOL_WELD_SIZE_OPTIONS)
         self.combo_bolt_dia = QComboBox()
         self.combo_bolt_dia.addItems(KEY_BATTENEDCOL_BOLT_DIAMETER_OPTIONS)
@@ -245,6 +256,11 @@ class BattenedColumnInputWidget(QWidget):
         form.addRow(KEY_DISP_BATTENEDCOL_AXIAL_LOAD, self.edit_axial_load)
         form.addRow(KEY_DISP_BATTENEDCOL_CONN_TYPE, self.combo_connection)
 
+        layout = QVBoxLayout()
+        layout.addLayout(form)
+        layout.addWidget(self.btn_design)
+        layout.addWidget(self.summary_display)
+        tab.setLayout(layout)
         form.addRow("Section Profile", self.combo_sec_profile)
         form.addRow("Section Size", self.combo_sec_size)
         form.addRow(self.lbl_custom_size, self.edit_custom_size)
@@ -326,4 +342,44 @@ class BattenedColumnInputWidget(QWidget):
                 self.custom_material_data = dialog.get_data()
                 grade = self.custom_material_data.get('grade') or 'Custom'
                 self.combo_material.setCurrentText(grade)
+
+
+    def _collect_inputs(self):
+        """Gather all input values into a dictionary."""
+        data = {
+            KEY_BATTENEDCOL_SEC_PROFILE: self.combo_sec_profile.currentText(),
+            KEY_BATTENEDCOL_SEC_SIZE: self.combo_sec_size.currentText(),
+            KEY_BATTENEDCOL_SPACING: self.edit_spacing.text(),
+            KEY_BATTENEDCOL_MATERIAL: self.combo_material.currentText(),
+            KEY_BATTENEDCOL_UNSUPPORTED_LENGTH_YY: self.edit_lyy.text(),
+            KEY_BATTENEDCOL_UNSUPPORTED_LENGTH_ZZ: self.edit_lzz.text(),
+            KEY_BATTENEDCOL_END_CONDITION_YY_1: self.combo_yy1.currentText(),
+            KEY_BATTENEDCOL_END_CONDITION_YY_2: self.combo_yy2.currentText(),
+            KEY_BATTENEDCOL_END_CONDITION_ZZ_1: self.combo_zz1.currentText(),
+            KEY_BATTENEDCOL_END_CONDITION_ZZ_2: self.combo_zz2.currentText(),
+            KEY_BATTENEDCOL_BATTEN_PROFILE: self.combo_batten_profile.currentText(),
+            KEY_BATTENEDCOL_AXIAL_LOAD: self.edit_axial_load.text(),
+            KEY_BATTENEDCOL_CONN_TYPE: self.combo_connection.currentText(),
+            KEY_BATTENEDCOL_WELD_SIZE: self.combo_weld_size.currentText(),
+            KEY_BATTENEDCOL_BOLT_DIAMETER: self.combo_bolt_dia.currentText(),
+            KEY_BATTENEDCOL_BOLT_TYPE: self.combo_bolt_type.currentText(),
+            KEY_BATTENEDCOL_EFFECTIVE_AREA: self.combo_effective_area.currentText(),
+            KEY_BATTENEDCOL_ALLOWABLE_UR: self.combo_allowable_ur.currentText(),
+        }
+        if self.lbl_custom_size.isVisible():
+            data[KEY_BATTENEDCOL_CUSTOM_SEC_SIZE] = self.edit_custom_size.text()
+        if self.custom_material_data:
+            data['custom_material'] = self.custom_material_data
+        return data
+
+    def _on_design_clicked(self):
+        """Show a dummy design summary using the collected inputs."""
+        data = self._collect_inputs()
+        summary = (
+            f"Section: {data.get(KEY_BATTENEDCOL_SEC_PROFILE)}\n"
+            f"Material: {data.get(KEY_BATTENEDCOL_MATERIAL)}\n"
+            f"Load: {data.get(KEY_BATTENEDCOL_AXIAL_LOAD)} kN\n"
+            f"Status: Safe"
+        )
+        self.summary_display.setPlainText(summary)
 
